@@ -1,0 +1,254 @@
+# 简单使用
+```
+from bottle import route,run
+
+@route("/hello")
+def hello():
+    return "hello world"
+
+if __name__=="__main__":
+    run(host="localhost",port=8080)
+#访问url http://localhost:8080/hello
+```
+## 创建应用
+```
+from bottle import Bottle,run,route
+app=Bottle()
+@app.route("/hello")
+def hello():
+    return "hello world"
+if __name__=="__main__":
+    #使用自定义应用代替默认应用
+    run(app,host="localhost",port=8080)
+```
+
+## 多个路由
+```
+@route("/xxxx")
+@route("/hello")
+def hello():
+    return "hello world"
+#访问url1 http://localhost:8080/hello
+#访问url2 http://localhost:8080/xxxx
+```
+## 动态路由
+#### 简单传参
+```
+@route("/hello/<name>")
+def hello(name):
+    return "hello "+name
+#访问url http://localhost:8080/hello/xubao
+输出 hello xubao
+```
+#### 参数过滤
+参数过滤格式<name:filter:config>
+默认过滤器
+* 1.int 仅匹配数字(可带符号),并转换为数字
+* 2.fload  匹配小数(兼容int型的数,定义在int型的参数过滤器前,会拦截int型的参数)
+* 3.path  匹配路径
+* 4.re  根据正则匹配
+
+```
+@route('/object/<id:int>')
+def callback(id):
+    assert isinstance(id, int)
+
+@route('/show/<name:re:[a-z]+>')
+def callback(name):
+    assert name.isalpha()
+
+@route('/static/<path:path>')
+def callback(path):
+    return static_file(path, ...)
+```
+
+#### http request methods
+```
+from bottle import get, post, request # or route
+
+@get('/login') # or @route('/login')
+def login():
+    return '''
+        <form action="/login" method="post">
+            Username: <input name="username" type="text" />
+            Password: <input name="password" type="password" />
+            <input value="Login" type="submit" />
+        </form>
+    '''
+
+@post('/login') # or @route('/login', method='POST')
+def do_login():
+    username = request.forms.get('username')
+    password = request.forms.get('password')
+    if check_login(username, password):
+        return "<p>Your login information was correct.</p>"
+    else:
+        return "<p>Login failed.</p>"
+```
+
+#### 路由静态文件
+```
+from bottle import static_file
+@route('/static/<filename>')
+def server_static(filename):
+    return static_file(filename, root='/path/to/your/static/files')
+
+@route('/static/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='/path/to/your/static/files')
+```
+
+#### error pages
+```
+from bottle import error
+@error(404)
+def error404(error):
+    return 'Nothing here, sorry'
+```
+
+#### 重定向
+```
+from bottle import redirect
+@route('/wrong/url')
+def wrong():
+    redirect("/right/url")
+```
+
+#### abort
+简单的提示
+```
+from bottle import route, abort
+@route('/restricted')
+def restricted():
+    abort(401, "Sorry, access denied.")
+```
+
+#### 设置读取cookies
+```
+@route('/hello')
+def hello_again():
+    if request.get_cookie("visited"):
+        return "Welcome back! Nice to see you again"
+    else:
+        response.set_cookie("visited", "yes")
+        return "Hello there! Nice to meet you"
+```
+
+#### 读取请求头
+```
+from bottle import route, request
+@route('/is_ajax')
+def is_ajax():
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return 'This is an AJAX request'
+    else:
+        return 'This is a normal request'
+```
+
+#### 获取请求参数
+```
+from bottle import route, request, response, template
+@route('/forum')
+def display_forum():
+    forum_id = request.query.id
+    page = request.query.page or '1'
+    return template('Forum ID: {{id}} (page {{page}})', id=forum_id, page=page)
+```
+
+#### 上传文件
+```
+<form action="/upload" method="post" enctype="multipart/form-data">
+  Category:      <input type="text" name="category" />
+  Select a file: <input type="file" name="upload" />
+  <input type="submit" value="Start upload" />
+</form>
+
+@route('/upload', method='POST')
+def do_upload():
+    category   = request.forms.get('category')
+    upload     = request.files.get('upload')
+    name, ext = os.path.splitext(upload.filename)
+    if ext not in ('.png','.jpg','.jpeg'):
+        return 'File extension not allowed.'
+
+    save_path = get_save_path_for_category(category)
+    upload.save(save_path) # appends upload.filename automatically
+    return 'OK'
+```
+
+#### 获取每个request的环境属性
+```
+@route('/my_ip')
+def show_ip():
+    ip = request.environ.get('REMOTE_ADDR')
+    # or ip = request.get('REMOTE_ADDR')
+    # or ip = request['REMOTE_ADDR']
+    return template("Your IP is: {{ip}}", ip=ip)
+```
+
+#### SimpleTemplate Engine
+##### 简单使用模版
+```
+@route （'/ hello' ）
+@route （'/ hello / <name>' ）
+def  hello （name = 'World' ）：
+    return  template （'hello_template' ， name = name ）
+# 将会在./views/文件夹或bottle.TEMPLATE_PATH列表中指定的文件夹按名称'hello_template.tpl查找模版
+
+@route （'/ hello' ）
+@route （'/ hello / <name>' ）
+@view （'hello_template' ）
+def  hello （name = 'World' ）：
+    return  dict （name = name ）
+# 使用view注解 使用返回传参
+```
+##### 简单模版语法
+[简单模版使用文档](http://www.bottlepy.org/docs/dev/stpl.html)
+```
+%if name == 'World':
+    <h1>Hello {{name}}!</h1>
+    <p>This is a test.</p>
+%else:
+    <h1>Hello {{name.title()}}!</h1>
+    <p>How are you?</p>
+%end
+
+>>> template('Hello {{name}}!', name='World')
+u'Hello World!'
+>>> template('Hello {{name.title() if name else "stranger"}}!', name=None)
+u'Hello stranger!'
+>>> template('Hello {{name.title() if name else "stranger"}}!', name='mArC')
+u'Hello Marc!'
+
+>>> template('Hello {{name}}!', name='<b>World</b>')
+u'Hello &lt;b&gt;World&lt;/b&gt;!'
+>>> template('Hello {{!name}}!', name='<b>World</b>')
+u'Hello <b>World</b>!'
+```
+##### 在模版中使用python语法
+```
+<ul>
+  % for item in basket:
+    <li>{{item}}</li>
+  % end
+</ul>
+# 在模版中可以使用嵌套但会忽略缩进格式,需要使用end声明结束
+
+#双重嵌套
+x='''
+%for item in l:
+    item={{item}}
+    %if type(item)==list:
+       %for x in item:
+           x={{x}}
+       %end
+   %end
+%end
+'''
+bottle.template(x,l=[1,[21,22]])
+#非代码行的空格和换行会输出,代码行用'%'开头
+```
+#### 高速缓存
+编译后模版会缓存在内存中,在调用bottle.TEMPLATES.clear()清除前,__对模版文件进行的修改不会起任何作用__
+
+[bottle使用文档](http://www.bottlepy.org/docs/dev/tutorial.html#quickstart-hello-world)
