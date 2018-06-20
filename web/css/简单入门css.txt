@@ -1,0 +1,182 @@
+//主要学习网站www.w3school.con.cn/css
+
+## css语法
+```
+selector {declaration1; declaration2; ... declarationN }
+//selector 选择器,代表选中的元素
+//declaration 代表一个属性的声明 由property:value构成
+//如果value 为多个单词时要加'"'号
+//例子:p {font-family: "sans serif";}
+//多条声明要用';'分隔,结尾可用可不用,但最好用上,减少改变时的出错
+//css对大小写不敏感,但如果选择器对应到html中的id和class时要求大小写一致
+简单例子
+h1 {color:red; font-size:14px;}
+```
+
+#### 值的不同写法
+```
+//正常写法
+p { color: #ff0000; }
+//简便写法
+p { color: #f00; }
+//
+p { color: rgb(255,0,0); }
+p { color: rgb(100%,0%,0%); }
+请注意，当使用 RGB 百分比时，即使当值为 0 时也要写百分比符号。
+但是在其他的情况下就不需要这么做了。比如说，当尺寸为 0 像素时，
+0 之后不需要使用 px 单位，因为 0 就是 0，无论单位是什么。
+```
+
+## css高级语法
+#### 选择器分组
+将选择器进行分组,这样多个选择器就可以共享同相同的声明
+```
+h1,h2,h3,h4,h5,h6 {
+  color: green;
+  }
+//这里六个标签都是绿色
+```
+
+#### 样式继承
+**子元素会从父元素继承属性**
+但子元素可以覆盖从父元素继承的属性
+
+## 派生选择器
+**通过元素在位置的上下文关系来定义样式**,可以使标记更简单
+
+#### 后代选择器
+```
+x y { color:blue;}
+//表示在x中的y元素的颜色为蓝色,**层次间隔无限**,即可以是子元素的子元素
+//可以有多层 x y z .. {...}
+
+```
+
+#### 子元素选择器
+```
+//只选择某元素中的子元素
+x > y {color:red}
+//x的子元素y颜色将变为红色
+```
+
+#### 相邻兄弟选择器
+```
+h1 + p {margin-top:50px;}
+//这个选择器读作：“选择**紧接着**在 h1 元素**后出现**的段落，h1 和 p 元素拥有**共同的父元素**”。
+```
+
+## 伪类
+伪类语法
+```
+selector : pseudo-class {property: value}
+例子:a:link {color: #FF0000}
+个人理解 将元素的某些特性变成了选择器的一些选择条件
+```
+#### 锚伪类
+```
+a:link {color: #FF0000}		/* 未访问的链接 */
+a:visited {color: #00FF00}	/* 已访问的链接 */
+a:hover {color: #FF00FF}	/* 鼠标移动到链接上 */
+a:active {color: #0000FF}	/* 选定的链接(鼠标按下未释放) */
+
+在 CSS 定义中，a:hover 必须被置于 a:link 和 a:visited 之后，才是有效的。
+在 CSS 定义中，a:active 必须被置于 a:hover 之后，才是有效的。
+```
+#### first-child伪类
+x:first-child{...}
+**表示任何元素的第一个子元素x**
+必须声明 <!DOCTYPE>，这样 :first-child 才能在 IE 中生效。
+```
+匹配所有 <p> 元素中的第一个 <i> 元素
+p > i:first-child {
+  font-weight:bold;
+  }
+
+匹配所有作为第一个子元素的 <p> 元素中的所有 <i> 元素
+p:first-child i {
+  color:blue;
+  }
+```
+###### 基本伪类类型
+```
+
+属性	   描述	                                  CSS
+:active	向被激活的元素添加样式。	                1
+:focus	向拥有键盘输入焦点的元素添加样式。	        2
+:hover	当鼠标悬浮在元素上方时，向元素添加样式。   1
+:link	向未被访问的链接添加样式。	                 1
+:visited	向已被访问的链接添加样式。	             1
+:first-child	向元素的第一个子元素添加样式。	     2
+:lang	向带有指定 lang 属性的元素添加样式。        2
+```
+
+## 伪元素
+语法
+```
+selector:pseudo-element {property:value;}
+```
+语法与伪类一样,个人觉得之所以分伪类和伪元素是因为伪类标记**一个元素的某一个状态**,而伪元素模仿一个元素
+有自己特定的属性
+
+#### first-line伪元素
+````
+注释："first-line" 伪元素只能用于块级元素。
+注释：下面的属性可应用于 "first-line" 伪元素：
+font
+color
+background
+word-spacing
+letter-spacing
+text-decoration
+vertical-align
+text-transform
+line-height
+clear
+````
+#### first-letter伪元素
+```
+注释："first-letter" 伪元素只能用于块级元素。
+注释：下面的属性可应用于 "first-letter" 伪元素：
+font
+color
+background
+margin
+padding
+border
+text-decoration
+vertical-align (仅当 float 为 none 时)
+text-transform
+line-height
+float
+clear
+```
+#### before伪元素
+```
+例子:h1:before{content:url(logo.gif);}
+```
+#### after伪元素
+```
+例子:h1:after{content:url(logo.gif);}
+```
+### content属性应用
+```
+//content只能在after,before伪类中使用(有待验证)
+//插入纯文字 content:"xxxxx"
+//不插入内容 content:none
+//插入图片 content:url(图片url)
+//插入元素属性 content:attr(属性名)
+//插入序号 需要 counter-increment:名称 标记;
+例子:
+h1:before{
+    content:counter(my)'.';
+}
+h1{
+    counter-increment:my;
+}
+//counter-increment 表示对标记进行递增默认1 可以使用多个标记
+//例子1 counter-increment:x y;
+//例子2 counter-increment:x 2;(有待验证,多个标记?)
+//counter-reset 重置标志
+//例子 counter-reset: x 2;
+更多详见https://www.zhangxinxu.com/wordpress/2014/08/css-counters-automatic-number-content/
+```
