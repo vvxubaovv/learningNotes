@@ -1,0 +1,13 @@
+### link
+(个人理解)表示对外部文件的链接  
+[比较详细的说明](https://blog.csdn.net/chen_zw/article/details/40786425)  
+全部属性  
+![全部属性](image/标签简介/link所有属性.jpg)
+##### 常用属性  
+href 要连接文件的位置 URL  
+type 要连接文件的MIME_type(表示文件类型,[简单解释](http://www.mamicode.com/info-detail-1388809.html),[MiME参考表](http://tool.oschina.net/commons/))
+rel (个人理解)用于表示链接文件对本文件所起的作用  
+常用值  
+* stylesheet 用于调用外部样式表
+* icon 定义网站图标
+* 

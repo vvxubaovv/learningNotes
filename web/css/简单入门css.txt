@@ -180,3 +180,16 @@ h1{
 //例子 counter-reset: x 2;
 更多详见https://www.zhangxinxu.com/wordpress/2014/08/css-counters-automatic-number-content/
 ```
+
+## 属性选择器
+```
+例子
+[title]{..} 选择带有title属性的元素设置样式
+[title=xxxx]{...} 选择title属性等于xxxx的元素
+[title~=xxxx]{...} 选择属性值中有xxxx的元素(xxxx必须与其他字母用空格分隔)
+[title|=xxxx]{...} 选择属性值以xxxx开头的元素
+目前只知道title="xxxx"和title="xxxx-yyyy"可以被选中
+[title^=xxxx]{...} 选择属性值为xxxx开头的元素(感觉比上一个通用)
+[title$=xxxx]{...} 选择属性值为xxxx结尾的元素(与上一个为正则表达式形式)
+[title*=xxxx]{...} 选择属性值中有xxxx的元素(与~=不同在于,不要求xxxx为单词形式,即只要值中含有xxxx这几个连续字母就行)
+```
