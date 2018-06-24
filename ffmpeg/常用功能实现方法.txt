@@ -1,0 +1,82 @@
+#### 获取视频截图
+ffmpeg -i 1.mkv -r 1 -ss 00:00:26 -t 00:00:07 %03d.png  
+从视频1.mkv 中从视频的26秒开始 持续7s 以每秒1帧的频率获取视频截图 保存文件路径为00x.png  
+参数解析:  
+-i 表示输入文件  
+-r 表示帧率 即1s多少帧(可以为小数)  
+-ss 表示视频起始时间  
+-t 表示经过多少时间(可以直接为数字,单位(s))  
+%03d 和c的格式化输出相同  
+
+#### 截取视频的一段
+ffmpeg  -i 1.mkv -vcodec copy -acodec copy -ss 00:00:10 -to 00:00:15 1.mp4 -y  
+从视频1.mkv中截取从视频的10秒开始 到视频的第15秒 的一段视频到1.mp4中  
+参数解析:  
+-vcodec 选取视频**编解码器**  参数copy表示和原视频相同
+-acodec 选取音频**编解码器**  参数copy表示和原视频相同
+-to 表示到(与-t互斥 -t优先)
+-y 表示如果输出文件已存在则覆盖
+
+#### 将图片转换为视频
+ffmpeg -f image2 -framerate 12 -i foo-%03d.jpeg -s 128*72 foo.avi  
+将图片格式为foo-00x.jpeg的图片按序号从小到大,以每秒12帧的输入帧率形式转换为视频foo.avi  
+参数解析:  
+-f 表示文件格式(用于输入/输出) 一般ffmpeg会按文件格式推出不需指定(如指定则不按文件格式推出)  
+例子:  ffmpeg -f image2 -framerate 12 -i foo-%03d.jpeg -s 128*72 -f avi foo.txt  
+这样文件名就为foo.txt,当然文件内容还是格式为avi的视频内容 修改后缀为.avi即可正常播放  
+-framerate 表示帧率 在这里即一秒输入几张图片  在简单的用法中与-r相同  
+注意: 在-i之前设置表示输入帧率 在-i之后表示输出帧率 如果只设置输入帧率则输出帧率则和输入帧率相同
+ 若只设置输出帧率则输入帧率应该为25 如果都不设置则都为25  输入帧率表示图片合成视频时每秒包含的图片数
+ ,输出帧率表示播放时每秒显示的图片数 可以理解为将原来1s中包含的帧拿出 如果原来的帧大于播放的帧 则间隔
+ 几帧播放,如果小于则原来的每一帧当多帧播放(也可以认为是原来每帧的持续时间加长了)  
+-s 表示输出视频的尺寸  
+
+#### 提取视频中的音频
+ffmpeg -i apple.mp4 -f mp3 -vn apple.mp3  
+将apple.mp4中的音频导出为apple.mp3  
+参数解析:  
+-vn 表示输出流中不含视频流  
+同理 -an 表示输出不含音频流  
+
+#### 将图片和音频合成带音频的视频
+ffmpeg -r 10 -i p/%04d.jpg -i o1.mp3 oo2.mp4
+
+
+### 个人简单使用
+##### 将视频分为图片和音频然后再合成
+1. 抽出音频 ffmpeg -i 1.mp4 -vn o1.mp3
+2. 输出图片 ffmpeg -i 1.mp4 -r 10 -s 128*72 p/%04d.jpg
+3. 图片合成视频 ffmpeg -r 10 -i p/%04d.jpg o1.mp4
+4. 音频视频合成 ffmpeg -i o1.mp4 -i o1.mp3 oo1.mp4
+最后的视频应该时分辨率为128*72 输出帧率为10 的mp4格式的视频文件
+
+#### 几张图片合成循环gif
+ffmpeg -r 1 -loop 1 -i p1/%d.jpg -t 50 g.gif  
+将p1文件夹中的1.jpg,2.jpg... 以每秒1帧 合成为 50秒的gif  
+参数解析:  
+-loop 表示按特定帧率生成视频时 如果时长不足 -t设置的时长 则循环读取 取值为(0/1) 1表示循环,0表示不循环  
+-t 在这表示视频总时长 如果按特定帧率生成视频时长大于设定时长则只取-t设定的时长,如果小于则根据是否循环 看是否需要凑足时长  
+
+#### 读取特定的几张图片合成gif1
+cat p2/1.jpg p2/2.jpg p2/3.jpg | ffmpeg -f image2pip -r 0.5 -i log.pip gggg.gif
+在windows上暂时没有验证成功
+
+#### 读取特定的几张图片合成gif2
+先编辑文件input.txt,文件内容格式如下
+```
+file '1.jpg'
+duration 5
+file '2.jpg'
+duration 1
+file '3.jpg'
+duration 5
+file '3.jpg'
+```
+duration 表示停留间隔单位(s)  
+最后一张重复是为体现最后一张间隔,否则最后一张停留时间极短  
+ffmpeg -f concat input.txt input.mp4  
+以concat格式 读入input.txt 生成input.mp4  
+[详细参考](https://blog.csdn.net/wangshuainan/article/details/77914508?fps=1&locationNum=4)
+
+### 特殊参数说明
+-threads n 以n个线程运行加快执行速度
