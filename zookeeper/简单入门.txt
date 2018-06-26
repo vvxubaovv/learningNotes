@@ -1,0 +1,68 @@
+### zookeeper主要操作:
+* 创建节点(增)
+* 删除节点(删)
+* 更新节点数据(改)
+* 读节点数据(查)
+* 监控节点变化
+
+### 单台主机简单配置  
+单位(ms) 客户端服务器心跳间隔  
+tickTime=2000  
+follower和leader初始连接 能容忍的最大心跳次数  
+initLimit=10 
+follower和leader请求和应答能容忍的最大心跳次数  
+syncLimit=5  
+数据保存目录(目录必须存在,否则起不来)  
+dataDir=D:\\Locate\\zookeeper-3.4.12\\data
+客户端连接端口  
+clientPort=2181  
+日志保存目录(目录必须存在,否则起不来,可以没有)  
+dataLogDir=D:\\Locate\\zookeeper-3.4.12\\log  
+
+
+### 集群配置
+其他与单机相同
+(这里是单台主机上的伪集群,所以每个zookeeper的配置文件conf的clientPort不一样,否则配置文件可以一样)  
+server.序号=ip:(Loder,Follower通信端口):选举端口  
+在dataDir中需要有一个myId文件内容为**序号(1-128)**
+
+server.1=192.168.1.52:10101:10201  
+server.2=192.168.1.52:10102:10202  
+server.3=192.168.1.52:10103:10203  
+server.4=192.168.1.52:10104:10204  
+server.5=192.168.1.52:10105:10205 
+
+
+
+### zookeeper自带客户端简单使用
+#### zooCli.cmd使用
+* 直接执行默认连接地址为 localhost:2181
+* 代参数执行 zooCli.cmd -server ip:port 连接到指定zookeeper地址
+####　所有命令
+![所有命令](images/简单入门/zookeeper自带客户端命令.jpg)
+简单说明  
+path表示所访问的路径 []内的为可选
+#### 常用命令
+```
+获取节点信息
+get /
+列出子节点
+ls /
+列出子节点和此节点信息
+ls2 /
+获取权限信息
+getAcl /
+格式:
+'授权方式:'用户名:密码(或anyone)
+:权限(cdrwa)
+例子:
+'digest,'user:tpUq/4Pn5A64fVZyQ0gOJ8ZWqkY=
+: cdrwa
+获取节点状态
+stat /
+
+访问带用户名密码的节点
+先设置addauth 授权方式 用户名:密码
+
+```
+[参考blog](https://www.jianshu.com/p/147ca2533aff)
