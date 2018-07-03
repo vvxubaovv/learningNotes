@@ -1,0 +1,119 @@
+### 常用系统装饰器
+##### classmethod
+将方法定义为类方法,与实例方法类似,但第一个参数为类引用,定义时参数至少为一个  
+````
+#使用示例
+class C:
+      @classmethod
+      def f(cls, arg1, arg2, ...):
+          ...
+#可以直接用类调用,也可以用实例调用效果一样,第一个参数默认为类引用
+#如果没有此装饰器,则该方法为普通方法,由类调用需要显示传入第一个参数,由实例调用则第一个参数默认为类实例
+````
+
+##### staticmethod
+定义静态方法,可以由类和实例调用,不会默认传参,使用时定义几个就需要传入几个
+````
+#使用示例
+class C:
+        @staticmethod
+        def f(arg1, arg2, ...):
+            ...
+````
+
+##### @abstractmethod
+定义抽象方法 需要与ABCMeta配合使用  
+```
+#使用示例
+import abc
+class AbstractClass(metaclass=abc.ABCMeta):
+  @abc.abstractmethod
+  def abstractMethod(self):
+      return
+#含有抽象方法的类无法实例化,但只要
+#继承抽象类的类实现与父类相同的名称的所有抽象方法则
+#子类可以实例化 只要同名,不管参数,不管是否是类方法还是实例方法
+#若只实现部分则依然无法实例化
+#貌似只在实例化时做了限制,所以类方法依然可以调用
+```
+可以与staticmethod配合使用 替代废弃的 abc.abstractstatimethod 定义抽象的静态方法  
+可以与classmethod配合使用 替代废弃的 abc.abstractclassmethod 定义抽象的类方法
+
+#####　property
+将方法属性化,即可以像获取普通属性和设置普通属性一样  
+````
+#使用示例
+class C(object):
+    @property
+    def x(self):
+        "I am the 'x' property."
+        return self._x
+    @x.setter
+    def x(self, value):
+        self._x = value
+    #删除属性
+    @x.deleter
+    def x(self):
+        del self._x
+````
+
+### 自定义装饰器
+######　定义不带参数的简单装饰器
+```
+def log(f):
+    def x(*args,**kargs):
+        print("run "+f.__name__)
+        return f(*args,**kargs)
+    return x
+    
+@log
+def x(x):
+    print(str(x))
+    
+x(1)
+
+#输出
+run x
+1
+
+```
+
+##### 创建带参数的装饰器
+````
+def log(x):
+    if x%2==0:
+        def _log(f):
+            def x(*args,**kargs):
+                print('偶数')
+                return f(*args,**kargs)
+            return x
+        return _log
+    else:
+    def _log(f):
+        def x(*args,**kargs):
+            print('奇数')
+            return f(*args,**kargs)
+        return x
+    return _log
+    
+@log(1)
+def x():
+    print("x")
+    
+#结果
+奇数
+x
+
+@log(2)
+def x():
+    print("x")
+    
+ #结果
+ 偶数
+ x
+ ````
+ 
+ ##### 装饰器个人理解
+ 主要是用自定义函数包裹原始函数,以实现功能扩展  
+ 对于无参装饰器,函数的引用会直接传入装饰器,  
+ 对于有参装饰器,先会把参数传入装饰器,然后把函数的引用传入返回的函数中  
