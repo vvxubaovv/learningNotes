@@ -19,18 +19,26 @@ clientPort=2181
 日志保存目录(目录必须存在,否则起不来,可以没有)  
 dataLogDir=D:\\Locate\\zookeeper-3.4.12\\log  
 
+是否开启监听服务(由jetty提供http服务,默认开启)  
+admin.enableServer=true  
+开启监听的端口(默认 8080)  
+admin.serverPort = 18888  
+执行四字命令的根路径(默认/commands)  
+四字命令示例(http://127.0.0.1:8080/commands/stat)  
+admin.commandURL = /xubao  
+
 
 ### 集群配置
 其他与单机相同
 (这里是单台主机上的伪集群,所以每个zookeeper的配置文件conf的clientPort不一样,否则配置文件可以一样)  
 server.序号=ip:(Loder,Follower通信端口):选举端口  
-在dataDir中需要有一个myId文件内容为**序号(1-128)**
+在dataDir中需要有一个myid文件内容为**序号(1-128)**
 
 server.1=192.168.1.52:10101:10201  
 server.2=192.168.1.52:10102:10202  
 server.3=192.168.1.52:10103:10203  
 server.4=192.168.1.52:10104:10204  
-server.5=192.168.1.52:10105:10205 
+server.5=192.168.1.52:10105:10205  
 
 
 
@@ -66,3 +74,5 @@ stat /
 
 ```
 [参考blog](https://www.jianshu.com/p/147ca2533aff)
+
+[四字命令详解](https://blog.csdn.net/u013673976/article/details/47279707)
