@@ -1,0 +1,64 @@
+##### 基本配置
+```
+#表示打印级别,以及输出到哪里
+log4j.rootLogger=info,stdout
+
+#配置输出方式
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+#配置输出日志编码方式
+log4j.appender.stdout.encoding = UTF-8
+#配置本输出最低的输出日志级别
+log4j.appender.stdout.Threshold = INFO
+#定义输出目标 在此为系统输出,target为ConsoleAppender属性,属性如何设置??
+log4j.appender.stdout.target=System.out
+#配置输出布局方式
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+#配置数据具体布局
+log4j.appender.stdout.layout.ConversionPattern=%5p [%t] (%F:%L) - %m%n
+
+#----------文件以一天滚动输出--------
+log4j.appender.local = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.local.encoding = UTF-8
+#配置启动时是否在原有日志文件中追加日志,false则清除原有文件,与文件读写配置类似
+log4j.appender.local.append = true
+#配置滚动间隔在此为一天滚动一次
+log4j.appender.local.datePattern = '.'yyyy-MM-dd
+#配置文件名
+log4j.appender.local.File = z:/server-log/xx.log
+log4j.appender.local.layout = org.apache.log4j.PatternLayout
+log4j.appender.local.layout.ConversionPattern = %d{yyyy-MM-dd HH:mm:ss.SSS} %-6p %-5X{PROCESS} [%X{ROLE}@%X{SESSION}] (%t) (%c) %m%n
+
+```
+**[配置详解](http://alexpdh.com/2017/05/03/log4j-properties-config/)**
+
+### log4j 配置组键理解
+##### 日志记录器
+定义:log4j.logger.xxxx  
+例子:log4j.logger.com.storm.unsafe.database.mybatis.dao.mapper  
+xxxx为记录器名称,在代码中Logger logger = LoggerFactory.getLogger("xxxx")定义  
+一般使用类的唯一限定名  
+记录器的命名可以在配置中进行应用,如两个记录器命名为aa.aa aa.bb  
+则配置中log4j.logger.aa则可以代表这两个记录器(即为包管理)  
+如代码没有声明,而配置中有,则忽略,如代码中有而配置中没有则继承**根记录器**输出  
+**特殊**:log4j.rootLogger(根记录器)  
+根据log4j的继承特性,所有记录器(包含依赖jar包中的记录器)都继承根记录器,继承输出级别,输出目的地,  如果对记录器进行配置则可以覆盖输出级别,**增加**输出目的地(相同忽略)  
+配置 log4j.additivity.xxxx(记录器名称) 可以取消继承(但好像需要准确定义该记录器的输出级别)  
+如log4j.logger.aa.aa=debug,输出目的地  
+log4j.additivity.aa.aa=false  
+定义 log4j
+对日志记录器可以配置 输出级别,输出目的地  
+例子:log4j.rootLogger=debug,stdout#输出目的地#
+
+##### 输出目的地
+定义:log4j.appender.xxx  
+例子:log4j.appender.stdout  
+对于输出目的地需要配置实现接口org.apache.log4j.Appender的实现类  
+例子:log4j.appender.stdout=org.apache.log4j.ConsoleAppender  
+对于实现类的属性也可以在配置中进行配置  
+例子:log4j.appender.stdout.encoding=utf8  
+log4j.appender.stdout.Threshold = INFO
+
+
+
+
+
