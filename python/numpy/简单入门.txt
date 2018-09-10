@@ -1,0 +1,33 @@
+### 常用函数
+##### np.array
+将python的数组装换为np的数组  
+```
+#示例
+import numpy as np
+np.array([1,2])
+```
+##### np.dot
+对两个数组进行矩阵点乘  
+```
+np.dot([1,2],[3,4])
+#结果 11
+```
+
+##### np.random.rand
+按维度生成不同的数组,以随机数填充
+```
+#生成一个随机数
+np.random.rand()
+#生成一维数组
+np.random.rand(5)
+#生成二维数组
+np.random.rand(3,6)
+#以此类推
+```
+
+##### np.random.randint
+按给定条件生成一维数组  
+```
+np.random.randint(最小(包含),最大(不包含),个数,类型(int,int64,str类型))
+
+```

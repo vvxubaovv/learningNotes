@@ -1,0 +1,17 @@
+##### 下载python源码
+wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz
+
+##### 安装一系列依赖
+```
+yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+```
+##### 3.7编译问题解决
+[参考网页](https://blog.csdn.net/wang725/article/details/79905612)
+
+##### 解压
+tar -zxf xx.tar.gz
+
+##### 编译安装
+cd xx
+./configure --prefix=/usr/local/python3(安装的文件夹)
+make && make install

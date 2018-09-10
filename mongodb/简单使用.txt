@@ -1,0 +1,16 @@
+#### 使用自带客户端mongo
+直接允许mongo进入本地mongodb(默认端口27017)  
+mongo 127.0.0.1:27017 进入指定ip的mongodb  
+mongodb 默认只能从本机连入
+
+use test 使用test数据库(即使不存在,如果不在该数据库插入数据,退出则不存在)  
+db 显示当前数据库  
+show dbs 显示所有数据库  
+db.xb.insert({"name":"xb"}) 向当前数据库的xb集合中插入数据如果集合xb不存在自动创建  
+db.dropDatabase()  删除数据库  
+db.xb.drop()  删除集合
+db.createCollection("xb")  创建集合  
+show collections  显示所有集合  
+db.xb.find() 查找xb集合中的所有数据  
+db.xb.find({'name':'xb'}) 按条件查找  
+db.xb.update({'name':'xb'},{$set:{'name':'xb1'}})  更新数据

@@ -1,0 +1,20 @@
+##### tensorflow
+要求python3.6 64位  
+pip install tensorflow  
+
+### 简单使用
+
+##### 导入
+```
+import tensorflow as tf
+```
+
+##### 简单常量加法计算
+```
+a=tf.consant(1)
+b=tf.consant(2)
+c=a+b
+sess=tf.Session()
+sess.run(c)
+#输出 3
+```

@@ -1,0 +1,13 @@
+##### 通过ssh连接其他主机
+```
+import paramiko
+client=paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client.connect('192.168.1.109',username='pi',password='2286993696')
+ssh_session=client.get_transport().open_session()
+ssh_session.exec_command('ls')
+print(ssh_session.recv(1024))
+#每个session使用后默认即关闭,未保存的操作如切换的路径,变量失效
+```
+
+##### 

@@ -1,0 +1,5 @@
+### 挂载NTFS格式的硬盘
+* 下载编译安装ntfs-3g  
+* 插入的硬盘会在/dev文件夹下以sd开头
+* 临时挂载mount -t ntfs-3g /dev/sdb5 /mnt
+* 用df -h 查看挂载情况
