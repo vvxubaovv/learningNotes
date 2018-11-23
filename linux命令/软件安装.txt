@@ -1,0 +1,6 @@
+### 编译安装
+#### 配置安装路径
+```
+./configure --prefix=/tmp/xx
+make && make install
+```
