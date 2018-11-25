@@ -1,0 +1,31 @@
+#### 开始scapy
+安装后直接使用 scapy
+python 调用 from scapy.all import *
+
+#### 基本使用
+##### 网络捉包
+```
+def sniff(count=0, store=True, offline=None, prn=None, lfilter=None,L2socket=None, timeout=None, opened_socket=None,stop_filter=None, iface=None, *arg, **karg):
+```
+pkts=sniff(count=100) #捕获一百个包
+p=pkts[0] #获取第一个包
+```
+<Ether  dst=00:36:76:4b:31:a8 src=d0:fa:1d:6b:d9:bf type=0x800 |<IP  version=4 ihl=5 tos=0x0 len=60 id=65 flags= frag=0 ttl=250 proto=icmp chksum=0x334a src=218.241.240.153 dst=192.168.1.2 options=[] |<ICMP  type=echo-reply code=0 chksum=0x5fe6 id=0x1 seq=0xf574 |<Raw  load='abcdefghijklmnopqrstuvwabcdefghi' |>>>>
+```
+以上为多层包Ether->IP->ICMP
+可使用ls(p)查看详细信息,使用hexdump以16进制打印包
+
+prn 每获取一个包就回调
+pkts=sniff(filter="tcp and src ip 192.168.1.2",timeout=50,prn=prn)
+
+filter bpf [bpf说明](https://blog.csdn.net/wuliusir/article/details/51704811)
+
+##### 构造协议包
+单层协议
+ip=IP()
+tcp=TCP()
+多层协议
+x=IP()/TCP()  或 TCP()/IP() 并不要求
+
+##### 包操作
+ls(pack) 查看协议包对应数据,和协议详细信息

@@ -1,0 +1,3 @@
+##### 时间单位
+import time
+time.time() #所得值为浮点数,单位为s,ms为小数

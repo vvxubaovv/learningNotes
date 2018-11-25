@@ -1,0 +1,10 @@
+name: angular2_quickstart
+description: QuickStart
+version: 0.0.1
+environment:
+  sdk: '>=2.0.0'
+dependencies:
+  angular: '>=5.0.0'
+  build_runner: ^0.10.0
+  build_test: ^0.10.2
+  build_web_compilers: ^0.4.0

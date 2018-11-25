@@ -1,0 +1,44 @@
+## centos7
+
+### 简单网络配置
+文件位置:/etc/sysconfig/network-script/ifcfg-eth0  
+个人注:本文件相当于网卡的配置文件,尝试删除后eth0网卡自动获取了ip
+重启后设备名称变为ens33,默认使用xxifcfg-ens33的配置  
+尝试将ifcfg-eth0 改为ifcfg-eth10 执行命令service network restart后
+只显示lo:..  没有eth0信息  
+但重启后依然为ifcfg-eth10的配置
+eth0配置
+```
+HWADDR=00:0C:29:E8:32:08   #mac地址
+DEFROUTE="yes"              
+IPADDR=192.168.179.100     #本机静态ip
+PREFIXO0=24
+GATEWAY=192.168.179.2      #网关ip
+NAME="eth0"                #设备名称
+UUID="8c2f772d-ce02-4284-b1a2-058d7f55fc11"
+DEVICE="eth0"              #网络接口名称
+ONBOOT="yes"               #开机??
+BOOTPROTO=static           #静态配置
+DNS1=192.168.179.2         #指定dns1
+DNS2=192.168.179.2         #指定dns2
+```
+
+ens33的配置
+```
+TYPE="Ethernet"
+PROXY_METHOD="none"
+BROWSER_ONLY="no"
+BOOTPROTO="dhcp"            #采用动态ip
+DEFROUTE="yes"
+IPV4_FAILURE_FATAL="no"
+IPV6INIT="yes"
+IPV6_AUTOCONF="yes"
+IPV6_DEFROUTE="yes"
+IPV6_FAILURE_FATAL="no"
+IPV6_ADDR_GEN_MODE="stable-privacy"
+NAME="ens33"
+UUID="8c2f772d-ce02-4284-b1a2-058d7f55fc11"
+DEVICE="ens33"
+ONBOOT="yes"
+
+```

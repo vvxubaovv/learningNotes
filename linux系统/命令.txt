@@ -1,0 +1,30 @@
+ctrl Z 使任务进入后台  fg 恢复最先进入后台的任务 fg 数字(第几个)
+
+& 使任务进入后台
+例子: ping www.baidu.com &
+
+jobs 查看从前台进入到后台的任务
+
+nohup 默认将任务输出重定向到nohup.out 方便管理重定向文件,可以在运行时清零  
+如果当前nohup.out 文件不可写则在用户目录创建nohup.out文件
+例子:
+nohup ping www.baidu.com &
+
+标准输出 和标准错误输出
+ping www.baidu.com 1>a.txt 2>&1
+1为标准输出,2为标准错误输出
+
+ssh pi@192.168.1.109 ssh连接  
+scp /z/a.txt pi@192.168.1.109:/tmp/aa 本地到远程  
+scp pi@192.168.1.109:/tmp/aa /z/c.txt 远程到本地  
+tail -n 3 -f x.txt 显示文本的最后三行并时时刷新  
+crontab -e 编辑定时任务  
+* * * * *  分 时 天 月 周
+
+netstat
+
+
+#### ssh
+-f 后台执行命令
+-C 请求压缩所有数据
+
