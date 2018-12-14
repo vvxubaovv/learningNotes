@@ -1,2 +1,17 @@
-设置自动转换换行符
+### 查看帮助
+git --help
+
+### 对应命令查看帮助
+git checkout --help
+
+### 设置自动转换换行符
 git config --global core.autocrlf true
+
+### 选择对应提交合并到当前分支
+git cherry-pick hashcode
+
+### 对比当前分支和其他分支
+git diff dev
+
+### 对比两次提交
+git diff hashcode1 hashcode2

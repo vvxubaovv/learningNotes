@@ -1,0 +1,25 @@
+[参考链接](https://blog.csdn.net/gtuu0123/article/details/6039592)
+
+#### 类对象查询
+select x from java.lang.String x  
+select heap.objects('java.lang.String')
+
+#### 条件过滤
+select {name:x.name,badCount:x.badCount} from magic.data.role.Role x where x.badCount > 50
+
+#### 对象属性查询
+select x.name from magic.data.role.Role x 单属性  
+select {name:x.name,badCount:x.badCount} from magic.data.role.Role x 多属性  
+select {class:s,s:x.toString(),size:sizeof(x),count:count(x),leng:x.value.length} from java.lang.String x where x.value.length >3
+
+
+#### 类查询
+select heap.findClass('java.lang.String')  
+select heap.classes() 所有类  
+
+
+#### 属性分析
+select referrers(s) from java.lang.String s 查找被引用  
+select referees(s) from java.lang.String s 查找引用  
+select count(heap.objects('java.lang.String')) 计数  
+

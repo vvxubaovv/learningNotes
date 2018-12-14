@@ -35,4 +35,13 @@ netstat
 #### ssh
 -f 后台执行命令
 -C 请求压缩所有数据
-
+##### 添加别名
+```
+.ssh/config
+内容
+Host 210
+HostName 192.168.1.210
+User aly
+Port 22
+IdentityFile ~/.ssh/id_rsa
+```
