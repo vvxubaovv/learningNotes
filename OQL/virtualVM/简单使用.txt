@@ -40,3 +40,9 @@ rhs -- 右边元素
 ```
 
 select unique(filter(concat(referrers(x),referrers(x)),"classof(it).name=='magic.online.bean.Account'")) from magic.online.controller.RoleController x where x.role.name.toString()=='蛮族之王' 连接,去重
+
+### 查询map中的key
+select map(filter(x.beanDefinitionMap.table,"it!=null"),"{key:it.key}") from org.springframework.beans.factory.support.DefaultListableBeanFactory x
+
+### 对于查询出来的多个数组对象也适用与map与filter
+select map(filter(x.source.table,"it!=null"),"{key:it.key,value:it.value}") from org.springframework.core.env.PropertiesPropertySource x
