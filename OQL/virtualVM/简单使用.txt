@@ -5,12 +5,15 @@ select x from java.lang.String x
 select heap.objects('java.lang.String')
 
 #### 条件过滤
-select {name:x.name,badCount:x.badCount} from magic.data.role.Role x where x.badCount > 50
+select {name:x.name,badCount:x.badCount} from magic.data.role.Role x where x.badCount > 50  
+select {name:x.name,badCount:x.badCount} from magic.data.role.Role x where x.name.toString()=='xxx' 使用toString()转换为字符串
+select x from magic.data.role.Role x where x.name.toString()=='蛮族之王' && x.cashSystem!=1930 多条件过滤
 
 #### 对象属性查询
 select x.name from magic.data.role.Role x 单属性  
 select {name:x.name,badCount:x.badCount} from magic.data.role.Role x 多属性  
 select {class:s,s:x.toString(),size:sizeof(x),count:count(x),leng:x.value.length} from java.lang.String x where x.value.length >3
+select x.role["wrapped-object"].getValueOfField("id") from magic.online.controller.RoleController x where x.role.name.toString()=='蛮族之王'  获取long型id
 
 
 #### 类查询
@@ -22,4 +25,24 @@ select heap.classes() 所有类
 select referrers(s) from java.lang.String s 查找被引用  
 select referees(s) from java.lang.String s 查找引用  
 select count(heap.objects('java.lang.String')) 计数  
+select count(heap.objects('magic.data.role.Role'),"it.name.toString()=='蛮族之王'") 计数2
+```
+built-in变量
+it -- 当前的迭代元素
+index -- 当前迭代元素的索引
+array -- 被迭代的数组
+```
+select map(sort(filter(heap.objects('magic.data.role.Role'),'it.name.toString()=="蛮族之王"'),"lhs.lastLoginTime.fastTime-rhs.lastLoginTime.fastTime"),"{loader: it, time: it.lastLoginTime.fastTime.toString() }") 排序
+```
+built-in变量
+lhs -- 左边元素
+rhs -- 右边元素
+```
 
+select unique(filter(concat(referrers(x),referrers(x)),"classof(it).name=='magic.online.bean.Account'")) from magic.online.controller.RoleController x where x.role.name.toString()=='蛮族之王' 连接,去重
+
+### 查询map中的key
+select map(filter(x.beanDefinitionMap.table,"it!=null"),"{key:it.key}") from org.springframework.beans.factory.support.DefaultListableBeanFactory x
+
+### 对于查询出来的多个数组对象也适用与map与filter
+select map(filter(x.source.table,"it!=null"),"{key:it.key,value:it.value}") from org.springframework.core.env.PropertiesPropertySource x
