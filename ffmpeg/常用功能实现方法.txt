@@ -4,7 +4,7 @@ ffmpeg -i 1.mkv -r 1 -ss 00:00:26 -t 00:00:07 %03d.png
 参数解析:  
 -i 表示输入文件  
 -r 表示帧率 即1s多少帧(可以为小数)  
--ss 表示视频起始时间  
+-ss 表示视频起始时间(默认从头开始)  
 -t 表示经过多少时间(可以直接为数字,单位(s))  
 %03d 和c的格式化输出相同  
 
@@ -14,8 +14,13 @@ ffmpeg  -i 1.mkv -vcodec copy -acodec copy -ss 00:00:10 -to 00:00:15 1.mp4 -y
 参数解析:  
 -vcodec 选取视频**编解码器**  参数copy表示和原视频相同
 -acodec 选取音频**编解码器**  参数copy表示和原视频相同
--to 表示到(与-t互斥 -t优先)
+-to 表示到(与-t互斥 -t优先)(默认到结束)
 -y 表示如果输出文件已存在则覆盖
+
+##### 特例
+###### mkv->avi
+ffmpeg  -i 1.mkv -bsf:v h264_mp4toannexb -vcodec copy -acodec copy -ss 00:00:10 -to 00:00:15 1.avi -y  
+
 
 #### 将图片转换为视频
 ffmpeg -f image2 -framerate 12 -i foo-%03d.jpeg -s 128*72 foo.avi  
@@ -38,9 +43,21 @@ ffmpeg -i apple.mp4 -f mp3 -vn apple.mp3
 -vn 表示输出流中不含视频流  
 同理 -an 表示输出不含音频流  
 
+#### ffmpeg转换自动识别
+ffmpeg -i 1.mp4 1.mp3 自动提取音频为MP3  
+ffmpeg -i 1.mp4 1.avi 自动转换为avi
+ffmpeg -i 1.mkv 1.ass 自动提取字幕为ass
+
 #### 将图片和音频合成带音频的视频
 ffmpeg -r 10 -i p/%04d.jpg -i o1.mp3 oo2.mp4
 
+
+#### 提取视频中的字幕
+ffmpeg -i 1.mkv -scodec copy 1.ass  
+ffmpeg -i 1.mkv -map 0:s:0 1.ass  
+(貌似只有mkv[可能]内涵字幕文件,其他格式字幕都压到了视频中,暂不知道怎么提取)  
+具体需ffmpeg -i 1.mkv 查看是否有subtitle 的stream
+字幕格式:ass,srt....
 
 ### 个人简单使用
 ##### 将视频分为图片和音频然后再合成
