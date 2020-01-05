@@ -1,0 +1,46 @@
+##单纯使用路由表
+### 工具
+两个网段1.* ,2.*  
+一个开启网络转发的双网卡的设备C 1.3,2.3  
+一个1.*网段的主机A 1.2  
+一个2.*网段的主机B 2.2  
+
+### 实现
+C主机开启网络转发   
+设置后 网卡1未找到的路由 会转发到网卡2继续寻找路由 网卡2一样
+临时  
+echo 1 >/proc/sys/net/ipv4/ip_forward #立即生效,重启失效  
+永久修改  
+vim /etc/sysctl.conf  
+net.ipv4.ip_forward=1  
+执行sysctl -p 立即生效  
+
+
+A主机默认网关设置为C  
+设置静态路由 sudo route add default gw x.x.1.3  
+B主机默认网关设置为C  
+设置静态路由 sudo route add default gw x.x.2.3  
+
+必须同时设置 否则即使能从A->B 但无法返回,表现也是无法ping通
+
+实现后可以在A主机上ping B ping x.x.2.2
+...........B.....ping A ping x.x.1.2
+
+##路由表配合iptables防火墙的net
+### 工具
+两个网段1.* ,2.*  
+一个开启网络转发的双网卡的设备C 1.3,2.3  
+一个1.*网段的主机A 1.2  
+一个2.*网段的主机B 2.2  
+
+### 实现
+C主机开启网络转发,见上  
+A主机默认网关设置为C  
+C上设置 sudo iptables -t nat -A POSTROUTING -s x.x.1.0/255.255.255.0 -o B主机网段的网卡名称 -j MASQUERADE  
+设置成功后A能访问B网段 即能ping通B 也能通过B所在网段访问其他网络 因为A网段相当于B网段中一个IP虚拟出的子网 但B不能ping通A  
+
+使B能ping通A  
+B主机默认网关设置为C  
+C上设置 sudo iptables -t nat -A POSTROUTING -s x.x.2.0/255.255.255.0 -o A主机网段的网卡名称 -j MASQUERADE  
+如果不能成功检查防火墙规则之间是否有冲突,路由规则之间是否有冲突  
+此实现可以做到 如果原本1.*网段不能上网2.*能上网 则1.*网段可以通过2.*网段上网 但因为需要经过C 网络可能会慢
