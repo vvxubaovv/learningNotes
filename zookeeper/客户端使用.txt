@@ -1,0 +1,13 @@
+#### session timeout
+根据配置tickTime 默认最小2*tickTime,最大20*tickTime
+也可根据xxx配置指定
+
+sessionTime 客户端服务器商定,要在服务器配置范围内,否则取靠近的值
+
+curator 默认sessionTime 60s
+
+zookeeper jar 3.5.3
+readTimeout 三分之二 sessionTime
+会产生 SessionTimeout 能重新连接 sessionId 不变
+
+超过sessionTime 不能reconnect 连接后sessionId改变

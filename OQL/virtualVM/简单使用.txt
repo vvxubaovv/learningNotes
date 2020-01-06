@@ -46,3 +46,10 @@ select map(filter(x.beanDefinitionMap.table,"it!=null"),"{key:it.key}") from org
 
 ### 对于查询出来的多个数组对象也适用与map与filter
 select map(filter(x.source.table,"it!=null"),"{key:it.key,value:it.value}") from org.springframework.core.env.PropertiesPropertySource x
+
+### 静态变量
+#### 全部静态属性
+select heap.findClass("java.lang.System").statics
+#### 单个静态属性
+select heap.findClass("java.lang.System").statics.变量名
+

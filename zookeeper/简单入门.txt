@@ -75,4 +75,5 @@ stat /
 ```
 [参考blog](https://www.jianshu.com/p/147ca2533aff)
 
-[四字命令详解](https://blog.csdn.net/u013673976/article/details/47279707)
+[四字命令详解](https://blog.csdn.net/u013673976/article/details/47279707)  
+四字命令简单使用: echo stat | nc 192.168.1.52:2181  (nc 为netcat命令)
