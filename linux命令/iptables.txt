@@ -1,0 +1,3 @@
+
+#### 使用nat的方式将77.*网段的输入输出到wlan0网卡上 wlan0在不同网卡上 即将77.*网段虚拟了一个wlan0网段的地址 使通过此主机的77.*能访问wlan0的网段
+sudo iptables -t nat -A POSTROUTING -s 192.168.77.0/255.255.255.0 -o wlan0 -j MASQUERADE

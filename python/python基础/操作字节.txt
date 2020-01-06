@@ -1,0 +1,6 @@
+### 不可变字节序列bytes
+一般通过字符串解码而来  
+bs='3343'.decode('utf8')
+### 可变字节序列bytearray
+b=bytearry()
+b.append(34) 输入一个数字(0,256)相当于八个字节

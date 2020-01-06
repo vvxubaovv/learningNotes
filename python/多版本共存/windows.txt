@@ -1,0 +1,57 @@
+## 使用 virtualenv
+### 安装
+pip install virtualenv
+### 简单使用
+#### 帮助 virtualenv --help
+#### 创建全新环境test1(默认使用当前python版本)
+virtualenv test1 --no-site-packages  
+输出
+```
+Using base prefix 'd:\\program files\\python36_64'
+New python executable in Z:\test1\Scripts\python.exe
+Installing setuptools, pip, wheel...
+done.
+```
+#### 指定python版本(必须本机已经安装的python版本)
+(路径带空格用"")  
+virtualenv test2 -p "D:\\Program Files\\python36_64\python.exe"  
+输出
+```
+Running virtualenv with interpreter D:\\Program Files\\python36_64\python.exe
+Using base prefix 'D:\\Program Files\\python36_64'
+New python executable in Z:\test2\Scripts\python.exe
+Installing setuptools, pip, wheel...
+done.
+```
+
+#### 使生效
+运行Scripts下的activate.bat
+输出
+```
+(test1) Z:\test1\Scripts>
+```
+
+#### 总结
+对于windows,单独安装python可能会导致环境变量的改变,可以安装anaconda,在创建虚拟环境时可以指定python版本,本机没有安装的版本也可以创建
+
+## 使用anaconda
+### 安装
+下载Anaconda3-5.3.1-Windows-x86_64.exe 然后点击安装(不能安装到带有空格的目录下)  
+anaconda也有对应的python版本,选择合适的下载  
+
+### 创建虚拟环境
+在windows中主要功能由conda.bat 脚本提供(本机位置D:\ProgramData\Anaconda3\Library\bin)  
+最好加入全局变量,方便调用  
+
+#### 创建python2.7环境(对于不存在的python环境,或包会去下载)
+conda create --name python2.7 python=2.7  
+(环境同一存放目录 D:\ProgramData\Anaconda3\envs\python2.7)
+
+### 激活与退出
+#### 激活
+conda activate python2.7
+
+#### 退出
+conda deactivate
+
+##如果嫌Anaconda包体过大可以选用MiniConda等小包体Python发行版
